@@ -106,7 +106,7 @@ def root():
         "version": "0.1.0",
         "status": "online",
         "docs": "/docs",
-        "github": "https://github.com/ethantclay/promptredteam",
+        "github": "https://github.com/ethantclay/promptredteam-api",
         "available_attacks": list(ATTACKS.keys()),
         "rate_limit": {
             "requests_per_minute": rate_limiter.requests_per_minute,
