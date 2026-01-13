@@ -14,7 +14,6 @@ class AttackResult:
     description: str
     evidence: Optional[str] = None
     mitigation: Optional[str] = None
-    reference_url: Optional[str] = None
 
 class BaseAttack(ABC):
     """Base class for all attack types"""

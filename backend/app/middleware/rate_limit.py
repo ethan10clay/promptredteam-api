@@ -2,7 +2,12 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 from collections import defaultdict
 from typing import Dict, List
+from app.config import settings
 import time
+import os
+
+RATE_LIMIT_ENABLED = settings.RATE_LIMIT_ENABLED
+
 
 # In-memory storage (resets on server restart)
 # For production, use Redis
@@ -51,8 +56,11 @@ class RateLimiter:
 
 
 # Global rate limiter instance
-rate_limiter = RateLimiter(requests_per_minute=10, max_text_length=1000)
-
+RATE_LIMIT_ENABLED = settings.RATE_LIMIT_ENABLED
+rate_limiter = RateLimiter(
+    requests_per_minute=settings.RATE_LIMIT_PER_MINUTE,
+    max_text_length=settings.MAX_TEXT_LENGTH
+)
 
 def get_client_ip(request: Request) -> str:
     """Get real client IP, handling various proxy configurations"""
@@ -80,6 +88,9 @@ async def rate_limit_middleware(request: Request, call_next):
     """
     # Skip rate limiting for docs and root endpoints
     if request.url.path in ["/", "/docs", "/openapi.json", "/redoc", "/health", "/attacks", "/rate-limit-status"]:
+        return await call_next(request)
+    
+    if not RATE_LIMIT_ENABLED:
         return await call_next(request)
     
     # Get client IP

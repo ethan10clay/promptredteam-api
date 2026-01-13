@@ -4,13 +4,13 @@ from pydantic import BaseModel, Field, validator
 from typing import List, Optional
 import time
 from app.middleware.rate_limit import rate_limit_middleware, rate_limiter
+from app.config import settings
 
 # Since we're creating a standalone version, include AttackResult inline
 class AttackResult:
     def __init__(self, attack_name: str, attack_type: str, detected: bool, 
                  severity: float, confidence: float, description: str,
-                 evidence: Optional[str] = None, mitigation: Optional[str] = None,
-                 reference_url: Optional[str] = None):
+                 evidence: Optional[str] = None, mitigation: Optional[str] = None):
         self.attack_name = attack_name
         self.attack_type = attack_type
         self.detected = detected
@@ -19,7 +19,7 @@ class AttackResult:
         self.description = description
         self.evidence = evidence
         self.mitigation = mitigation
-        self.reference_url = reference_url
+
 
 from app.attacks import (
     ZeroWidthAttack,
@@ -39,9 +39,8 @@ ATTACKS = {
 }
 
 app = FastAPI(
-    title="LLM Security Testing API",
-    description="Test your prompts for security vulnerabilities - Free & Open Source",
-    version="0.1.0"
+    title=settings.API_TITLE,
+    version=settings.API_VERSION
 )
 
 # Add rate limiting middleware - CRITICAL: Must be added before CORS
@@ -50,7 +49,7 @@ app.middleware("http")(rate_limit_middleware)
 # CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Lock this down in production
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -85,7 +84,6 @@ class AttackResultResponse(BaseModel):
     description: str
     evidence: Optional[str]
     mitigation: Optional[str]
-    reference_url: Optional[str]
 
 class TestResponse(BaseModel):
     scan_id: str

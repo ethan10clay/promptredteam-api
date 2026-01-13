@@ -1,21 +1,15 @@
-# backend/app/config.py
+# config.py
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    """Application settings"""
-    
-    # API Settings
     API_TITLE: str = "LLM Security Testing API"
     API_VERSION: str = "0.1.0"
-    API_DESCRIPTION: str = "Test your prompts for security vulnerabilities"
     
-    # CORS
-    CORS_ORIGINS: list = ["*"]  # Change in production
-    
-    # Rate Limiting (future use)
+    RATE_LIMIT_ENABLED: bool = False
     RATE_LIMIT_PER_MINUTE: int = 60
+    MAX_TEXT_LENGTH: int = 100000
     
-    # Logging
+    CORS_ORIGINS: list = ["*"]
     LOG_LEVEL: str = "INFO"
     
     class Config:
