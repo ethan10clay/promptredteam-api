@@ -2,7 +2,7 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 from collections import defaultdict
 from typing import Dict, List
-from app.config import settings
+from config import settings
 import time
 import os
 
