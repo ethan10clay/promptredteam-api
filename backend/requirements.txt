@@ -1,9 +1,0 @@
-fastapi
-uvicorn[standard]
-pydantic
-pydantic_settings
-python-multipart
-pytest
-httpx
-requests
-mangum

@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic_settings
+python-multipart
+python-dotenv==1.0.0
+mangum
+requests
+slowapi==0.1.9
+fastapi-cors==0.0.6
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2

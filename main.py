@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional
 import time
-from app.middleware.rate_limit import rate_limit_middleware, rate_limiter
-from app.config import settings
+from middleware.rate_limit import rate_limit_middleware, rate_limiter
+from config import settings
 
 # Since we're creating a standalone version, include AttackResult inline
 class AttackResult:
@@ -21,7 +21,7 @@ class AttackResult:
         self.mitigation = mitigation
 
 
-from app.attacks import (
+from attacks import (
     ZeroWidthAttack,
     DirectInjectionAttack,
     RoleManipulationAttack,
@@ -136,7 +136,7 @@ def list_attacks():
 @app.get("/rate-limit-status")
 def rate_limit_status(request: Request):
     """Check rate limit status for debugging"""
-    from app.middleware.rate_limit import get_client_ip
+    from middleware.rate_limit import get_client_ip
     
     client_ip = get_client_ip(request)
     return {
